@@ -86,6 +86,7 @@ func (w *Watcher) Watching() {
 				fmt.Println(err)
 				err = w.Runner.Start()
 				fmt.Println(err)
+				fmt.Println("restart success")
 			}
 		}
 	}()

@@ -30,18 +30,18 @@ func (c *Runner) Start() error {
 		return cmd.Run()
 	}
 
-	err := runCmd("git", "pull")
-	if err != nil {
-		return err
-	}
+	// err := runCmd("git", "pull")
+	// if err != nil {
+	// 	return err
+	// }
 
-	err = runCmd("go", "get")
-	if err != nil {
-		return err
-	}
+	// err = runCmd("go", "get")
+	// if err != nil {
+	// 	return err
+	// }
 
 	filepath := os.TempDir() + c.Project.Name
-	err = runCmd("go", "build", "-o", filepath)
+	err := runCmd("go", "build", "-o", filepath)
 	if err != nil {
 		return err
 	}
