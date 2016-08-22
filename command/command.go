@@ -9,12 +9,17 @@ import (
 )
 
 type Runner struct {
-	Project *watcher.Project
+	Project watcher.Project
 	run     *exec.Cmd
 }
 
+func NewRunner(p watcher.Project) watcher.Runner {
+	return &Runner{
+		Project: p,
+	}
+}
 func (c *Runner) Start() error {
-	if c.Project == nil {
+	if c.Project.Name == "" || c.Project.Path == "" {
 		return errors.New("empty Project")
 	}
 
