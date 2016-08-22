@@ -47,7 +47,7 @@ func (c *Runner) Start() error {
 	}
 	os.Remove(filepath)
 
-	filepath = os.Getenv("GOPATH") + "/bin" + c.Project.Name
+	filepath = os.Getenv("GOPATH") + "/bin/" + c.Project.Name
 	err = runCmd("go", "build", "-o", filepath)
 	if err != nil {
 		return err
