@@ -1,6 +1,7 @@
 package fsnotify
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -65,7 +66,8 @@ func (w *Watcher) add(path string) {
 }
 
 func (w *Watcher) Watching() {
-	w.Runner.Start()
+	err := w.Runner.Start()
+	fmt.Println(err)
 	go func() {
 		timer := time.NewTimer(time.Second * 1)
 		start := false
@@ -80,8 +82,10 @@ func (w *Watcher) Watching() {
 			case <-w.events:
 				start = true
 			case <-timer.C:
-				w.Runner.Stop()
-				w.Runner.Start()
+				err = w.Runner.Stop()
+				fmt.Println(err)
+				err = w.Runner.Start()
+				fmt.Println(err)
 			}
 		}
 	}()

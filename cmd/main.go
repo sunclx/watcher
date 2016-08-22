@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/sunclx/watcher"
@@ -9,14 +10,14 @@ import (
 )
 
 func main() {
-
+	fmt.Println("starting...")
 	prj := watcher.Project{
 		Name: "watcher",
-		Path: os.Getenv("GOPATH") + "/github.com/sunclx/watcher/cmd",
+		Path: os.Getenv("GOPATH") + "/src/github.com/sunclx/watcher/cmd",
 	}
 	runner := command.NewRunner(prj)
 	watcher := fsnotify.NewWatcher(prj, runner)
-
+	fmt.Println("watching...")
 	watcher.Watching()
 
 }
