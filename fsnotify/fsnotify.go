@@ -30,6 +30,7 @@ func NewWatcher(p watcher.Project, r watcher.Runner) *Watcher {
 	}
 	go func() {
 		for event := range watcher.Events {
+			fmt.Println(event.String())
 			if event.Op&fsnotify.Create == fsnotify.Create {
 				fi, _ := os.Lstat(event.Name)
 				if fi.IsDir() {
@@ -68,26 +69,27 @@ func (w *Watcher) add(path string) {
 func (w *Watcher) Watching() {
 	err := w.Runner.Start()
 	fmt.Println(err)
-
-	timer := time.NewTimer(time.Second * 1)
-	start := false
-	for {
-		if !timer.Stop() {
-			<-timer.C
+	go func() {
+		timer := time.NewTimer(time.Second * 1)
+		start := false
+		for {
+			if !timer.Stop() {
+				<-timer.C
+			}
+			if start {
+				timer.Reset(time.Second * 1)
+			}
+			select {
+			case <-w.events:
+				start = true
+			case <-timer.C:
+				err = w.Runner.Stop()
+				fmt.Println(err)
+				err = w.Runner.Start()
+				fmt.Println(err)
+				fmt.Println("restart success")
+			}
 		}
-		if start {
-			timer.Reset(time.Second * 1)
-		}
-		select {
-		case <-w.events:
-			start = true
-		case <-timer.C:
-			err = w.Runner.Stop()
-			fmt.Println(err)
-			err = w.Runner.Start()
-			fmt.Println(err)
-			fmt.Println("restart success")
-		}
-	}
+	}()
 
 }

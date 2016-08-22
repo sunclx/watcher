@@ -14,6 +14,7 @@ var (
 type Project struct {
 	Name string
 	Path string
+	Main string
 }
 
 type ProjectService interface {

@@ -59,6 +59,7 @@ func (c *Runner) Start() error {
 		return err
 	}
 	c.run = run
+	run.Wait()
 	return nil
 }
 func (c *Runner) Stop() error {
