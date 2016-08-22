@@ -68,26 +68,26 @@ func (w *Watcher) add(path string) {
 func (w *Watcher) Watching() {
 	err := w.Runner.Start()
 	fmt.Println(err)
-	go func() {
-		timer := time.NewTimer(time.Second * 1)
-		start := false
-		for {
-			if !timer.Stop() {
-				<-timer.C
-			}
-			if start {
-				timer.Reset(time.Second * 1)
-			}
-			select {
-			case <-w.events:
-				start = true
-			case <-timer.C:
-				err = w.Runner.Stop()
-				fmt.Println(err)
-				err = w.Runner.Start()
-				fmt.Println(err)
-				fmt.Println("restart success")
-			}
+
+	timer := time.NewTimer(time.Second * 1)
+	start := false
+	for {
+		if !timer.Stop() {
+			<-timer.C
 		}
-	}()
+		if start {
+			timer.Reset(time.Second * 1)
+		}
+		select {
+		case <-w.events:
+			start = true
+		case <-timer.C:
+			err = w.Runner.Stop()
+			fmt.Println(err)
+			err = w.Runner.Start()
+			fmt.Println(err)
+			fmt.Println("restart success")
+		}
+	}
+
 }
